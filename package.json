@@ -4,8 +4,19 @@
   "description": "我的好哥们终于成了我的甲方爸爸",
   "main": "index.js",
   "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon server/app.js",
+    "server-start": "pm2 start pm2.config.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "zhangliyong",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "boom": "^7.3.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-jwt": "^5.3.3",
+    "express-validator": "^6.6.0",
+    "jsonwebtoken": "^8.5.1"
+  }
 }

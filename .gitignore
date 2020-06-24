@@ -1,0 +1,13 @@
+logs
+*.log
+*.log*
+.idea
+.vscode
+.history
+node_modules/
+client/**/node_modules
+client/**/dist
+build
+dist
+app.config.test.js
+pm2.config.test.json
