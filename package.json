@@ -1,0 +1,11 @@
+{
+  "name": "xiaosong-project",
+  "version": "1.0.0",
+  "description": "我的好哥们终于成了我的甲方爸爸",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "zhangliyong",
+  "license": "ISC"
+}
