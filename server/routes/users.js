@@ -3,7 +3,7 @@ const router = express.Router()
 const md5 = require('../utils/md5')
 
 
-const { login, findUser } = require('../services/users')
+const { login, findUser, addUser } = require('../services/users')
 const { body, validationResult } = require('express-validator')
 const boom = require('boom')
 const jwt = require('jsonwebtoken')
@@ -17,7 +17,34 @@ const loginVaildator = [
   body('password').isString().withMessage('密码类型错误')
 ]
 
-router.post('/login', loginVaildator, function (req, res, next) {
+router.post('/add', loginVaildator, (req, res, next) => {
+  const err = validationResult(req)
+  if (!err.isEmpty()) {
+    //获取错误信息
+    const [{ msg }] = err.errors
+    //抛出错误,交给我们自定义的统一异常处理程序进行错误返回 
+    next(boom.badRequest(msg))
+  } else {
+    let { username, password } = req.body;
+     //md5加密
+     password = md5(password)
+     addUser(username, password).then(() => {
+        const token = jwt.sign(
+          //playload：签发的 token 里面要包含的一些数据。
+          { username },
+          //私钥
+          PRIVATE_KEY,
+          //设置过期时间
+          { expiresIn: JWT_EXPIRED }
+        )
+        res.json({ code: 0, msg: '注册成功', data: { token } })
+    }).catch((err) => {
+      res.json({ code: -1, msg: err || '未知错误', data: {} })
+    })
+  }
+})
+
+router.post('/login', loginVaildator, (req, res, next) => {
   const err = validationResult(req)
   //如果验证错误,empty不为空
   if (!err.isEmpty()) {
@@ -44,6 +71,8 @@ router.post('/login', loginVaildator, function (req, res, next) {
         )
         res.json({ code: 0, msg: '登录成功', data: { token } })
       }
+    }).catch((err) => {
+      res.json({ code: -1, msg: '用户名或密码错误', data: {} })
     })
   }
 })

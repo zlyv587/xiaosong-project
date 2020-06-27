@@ -8,6 +8,8 @@ const routes = require('./routes')
 const {port} = require('../app.config')
 const app = express()
 
+require('./db')
+
 
 
 //解析我们的form表单提交的数据,Content-Type: application/x-www-form-urlencoded

@@ -22,7 +22,9 @@ const jwtAuth = expressJwt({
   //设置jwt认证白名单,比如说/user/login登录接口不需要拦截是否登录
 }).unless({
   path: [
-    '/user/login'
+    '/user/login',
+    'user/add_user',
+    
   ]
 })
 

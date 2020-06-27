@@ -1,6 +1,9 @@
 const express = require('express')
 const boom = require('boom')
 
+//user路由模块
+const userRouter = require('./users')
+
 //导入jwt认证函数
 const { jwtAuth } = require('../utils/login-jwt')
 

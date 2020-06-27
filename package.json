@@ -14,9 +14,13 @@
     "body-parser": "^1.19.0",
     "boom": "^7.3.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
     "express": "^4.17.1",
     "express-jwt": "^5.3.3",
     "express-validator": "^6.6.0",
     "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }

@@ -2,7 +2,7 @@ const config = {
   development: {
     dbConfig: {
       url: 'mongodb://cms:cms@127.0.0.1:27017/',
-      name: 'cms_test'
+      name: 'cms'
     }
   },
   production: {
@@ -18,9 +18,9 @@ const env = process.env.NODE_ENV;
 
 
 module.exports = {
-  env: 'production',
+  env,
   appRoot: process.cwd(),
-  port: 3030,
+  port: 8081,
   keys: ['cms'],
   PRIVATE_KEY: 'cms',
   ...config[env]
