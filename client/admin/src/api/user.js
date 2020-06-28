@@ -10,6 +10,7 @@ export function add(data) {
 
 //登录
 export function login(data) {
+  console.log(data)
   return request({
     url: '/user/login',
     method: 'post',

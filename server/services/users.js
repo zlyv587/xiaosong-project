@@ -3,20 +3,21 @@ const User = require('../models/user');
 
 
 
-function addUser (username, password) {
-  return User.add({ username, password })
+function addUser (name, password) {
+  return User.add({ name, password })
 }
 
-function login (username, password) {
-  return findUser(username).then(user => {
+function login (name, password) {
+  return findUser(name).then(user => {
      if (user.password !== password) {
          return Promise.reject()
-     }
+     } 
+     return user
   })
 }
 
-function findUser (username) {
-  return User.find(username)
+function findUser (name) {
+  return User.find(name)
 }
 
 

@@ -9,11 +9,12 @@ const boom = require('boom')
 const jwt = require('jsonwebtoken')
 const { PRIVATE_KEY, JWT_EXPIRED } = require('../utils/constant')
 const { decode } = require('../utils/login-jwt')
+const user = require('../models/user')
 
 
 //登录
 const loginVaildator = [
-  body('username').isString().withMessage('用户名类型错误'),
+  body('name').isString().withMessage('用户名类型错误'),
   body('password').isString().withMessage('密码类型错误')
 ]
 
@@ -25,19 +26,19 @@ router.post('/add', loginVaildator, (req, res, next) => {
     //抛出错误,交给我们自定义的统一异常处理程序进行错误返回 
     next(boom.badRequest(msg))
   } else {
-    let { username, password } = req.body;
+    let { name, password } = req.body;
      //md5加密
      password = md5(password)
-     addUser(username, password).then(() => {
+     addUser(name, password).then(() => {
         const token = jwt.sign(
           //playload：签发的 token 里面要包含的一些数据。
-          { username },
+          { name },
           //私钥
           PRIVATE_KEY,
           //设置过期时间
           { expiresIn: JWT_EXPIRED }
         )
-        res.json({ code: 0, msg: '注册成功', data: { token } })
+        res.json({ code: 0, msg: '注册成功', data: { token, name } })
     }).catch((err) => {
       res.json({ code: -1, msg: err || '未知错误', data: {} })
     })
@@ -45,6 +46,7 @@ router.post('/add', loginVaildator, (req, res, next) => {
 })
 
 router.post('/login', loginVaildator, (req, res, next) => {
+  
   const err = validationResult(req)
   //如果验证错误,empty不为空
   if (!err.isEmpty()) {
@@ -53,23 +55,24 @@ router.post('/login', loginVaildator, (req, res, next) => {
     //抛出错误,交给我们自定义的统一异常处理程序进行错误返回 
     next(boom.badRequest(msg))
   } else {
-    let { username, password } = req.body;
+    let { name, password } = req.body;
     //md5加密
     password = md5(password)
-    login(username, password).then(user => {
+    login(name, password).then(user => {
+      console.log('user::::', user)
       if (!user || user.length === 0) {
         res.json({ code: -1, msg: '用户名或密码错误', data: {} })
       } else {
         //登录成功，签发一个token并返回给前端
         const token = jwt.sign(
           //playload：签发的 token 里面要包含的一些数据。
-          { username },
+          { name },
           //私钥
           PRIVATE_KEY,
           //设置过期时间
           { expiresIn: JWT_EXPIRED }
         )
-        res.json({ code: 0, msg: '登录成功', data: { token } })
+        res.json({ code: 0, msg: '登录成功', data: { token, name } })
       }
     }).catch((err) => {
       res.json({ code: -1, msg: '用户名或密码错误', data: {} })
@@ -82,9 +85,10 @@ router.post('/login', loginVaildator, (req, res, next) => {
 router.get('/info', function (req, res, next) {
   //解析token,并且token存在
   const token = decode(req) || {}
-  findUser(token.username).then(user => {
+  findUser(token.name).then(user => {
     if (user) {
-      res.json({ code: 0, msg: '用户信息查询成功', data: user })
+      const {name} = user;
+      res.json({ code: 0, msg: '用户信息查询成功', data: {name} })
     } else {
       res.json({ code: -1, msg: '用户信息查询失败', data: {} })
     }

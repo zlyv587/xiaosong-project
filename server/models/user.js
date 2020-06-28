@@ -17,12 +17,14 @@ let User = mongoose.model('User', UserSchema);
 
 module.exports = {
   add ({ name, password }) {
+    console.log('user============:::', name, password)
     return new Promise((resolve, reject) => {
-      User.find().byName(name).exec(async (err, user) => {
+      User.find({name}, async (err, user) => {
+        console.log('user============:::', user, err)
         if (err) {
           return reject(err);
         }
-        if (user) {
+        if (user.length) {
           reject('用户名已存在!')
         } else {
           let user = {
@@ -40,11 +42,11 @@ module.exports = {
   },
   find(name) {
     return new Promise((resolve, reject) => {
-      User.find().byName(name).exec((err, user) => {
+      User.find({name}, (err, user) => {
         if (err) {
           return reject(err)
         }
-        resolve(user)
+        resolve(user[0])
       })
     })
   }

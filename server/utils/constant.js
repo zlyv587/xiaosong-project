@@ -8,5 +8,5 @@ module.exports = {
     //自定义jwt加密的私钥
     PRIVATE_KEY: 'login-cms',
     //过期时间30秒
-    JWT_EXPIRED: 60 * 0.5,
+    JWT_EXPIRED: 60 * 240,
 }

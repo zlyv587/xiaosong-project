@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { getToken } from "@/utils/auth";
+import { getToken, setToken, removeToken } from "@/utils/auth";
 import { getUserInfo } from "@/api/user";
 
 const state = {
@@ -11,11 +11,16 @@ const state = {
 Vue.observable(state);
 
 const mutations = {
-  SET_TOKEN(state, token) {
+  SET_TOKEN(token) {
     state.token = token;
+    setToken(token);
   },
-  SET_USER_INFO(state, userInfo) {
+  SET_USER_INFO(userInfo) {
     state.userInfo = userInfo;
+  },
+  REMOVE_TOKEN() {
+    state.token = '';
+    removeToken()
   }
 };
 
@@ -23,7 +28,7 @@ const action = {
   getUserInfo() {
     return getUserInfo().then(res => {
       if (res.code === 0) {
-        mutations.SET_USER_INFO(state, res.data);
+        mutations.SET_USER_INFO(res.data);
       }
     });
   }
@@ -34,5 +39,6 @@ const store = {
   mutations,
   action
 };
+
 
 export default store;
